@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Peldaños — Dejanos tu opinión</title>
+<meta name="theme-color" content="#D7D3CB">
+
+<!--
+  ================================================================
+  GUÍA RÁPIDA — armar la tarjeta para UN LOCAL NUEVO
+  ================================================================
+  Solo tenés que tocar 3 lugares de este archivo. Los 3 están
+  marcados más abajo con el mismo título que ves acá:
+
+  PASO 1 — COLORES
+  Buscá el bloque ":root{ ... }" un poco más abajo en este mismo
+  <style>. Ahí cambiás los colores del local (ver instrucciones
+  detalladas en ese bloque).
+
+  PASO 2 — LOGO
+  Reemplazá el archivo logo.png (ver instrucciones más abajo, en
+  el bloque "PASO 2 — LOGO").
+
+  PASO 3 — TEXTOS Y LINKS
+  Buscá "PASO 3 — TEXTOS Y LINKS" dentro del <script>, cerca del
+  final del archivo (antes de </body>). Ahí cambiás nombre, rubro,
+  eslogan, ubicación y los 4 links (Google, Instagram, WhatsApp,
+  Facebook).
+
+  Lo único que NO tenés que tocar nunca es el bloque "CREATOR"
+  (tu firma con tu Instagram) — eso queda igual en todas las
+  tarjetas que armes.
+
+  Al final: guardá, subí el HTML y el logo.png a GitHub, y Netlify
+  publica la página sola. Esa URL final es la que va en el QR y en
+  el chip NFC.
+  ================================================================
+-->
+
+<style>
+  /* ================================================================
+     PASO 1 — COLORES
+     ================================================================
+     Cambiá estos 5 códigos de color para adaptar la tarjeta a la
+     identidad de cada local. Van en formato HEX (ejemplo: #3A2A1C).
+     Si no sabés el código de un color, buscá "color picker" en
+     Google, elegís el color con el mouse y te da el código HEX.
+
+     No hace falta entender el resto del archivo: cambiando solo
+     estas 5 líneas, todos los textos y botones que usan ese color
+     se actualizan solos en toda la página.
+     ================================================================ */
+  :root{
+    --bg: #D8D4CB;         /* Fondo de toda la página (detrás de la tarjeta) */
+    --bg-soft: #E2DED4;    /* Variante más clara del fondo, para el degradado suave de arriba */
+    --paper: #FBF7EE;      /* Fondo de la tarjeta blanca central */
+    --paper-dim: #EEE4D0;  /* Fondo de los botones de Instagram/WhatsApp/Facebook y la línea divisoria */
+    --ink: #3A2A1C;        /* Color principal: título, textos y fondo del botón "Dejanos tu reseña" */
+    --ink-soft: #6E5C4A;   /* Color de textos secundarios: ubicación, "un minuto tuyo..." */
+    --gold: #C0793A;       /* Color de las 5 estrellas */
+    --gold-soft: #DDA766;  /* Color del textito chico dentro del botón de Google */
+    --wood-dark: #5C3A22;  /* Color del eslogan (la frase en cursiva debajo del logo) */
+  }
+  /* ================================================================
+     FIN PASO 1 — no hace falta tocar nada más de acá hasta el
+     bloque "PASO 2 — LOGO" más abajo.
+     ================================================================ */
+
+  *{ box-sizing: border-box; }
+
+  html,body{
+    margin:0;
+    padding:0;
+    min-height:100%;
+  }
+
+  body{
+    font-family: 'Work Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background:
+      radial-gradient(circle at 50% -10%, var(--bg-soft) 0%, var(--bg) 60%);
+    color: var(--ink);
+    min-height: 100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: 32px 18px 60px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body::before{
+    content:"";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.5;
+    background-image:
+      radial-gradient(rgba(58,42,28,0.035) 1px, transparent 1px);
+    background-size: 3px 3px;
+  }
+
+  .wrap{
+    width: 100%;
+    max-width: 420px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* -------- hero / logo -------- */
+  header{
+    text-align:center;
+    margin-bottom: 26px;
+  }
+
+  .logo-img{
+    width: 168px;
+    height: 168px;
+    object-fit: contain;
+    border-radius: 50%;
+    box-shadow: 0 18px 34px -12px rgba(58,42,28,0.35);
+    margin: 0 auto 18px;
+    display:block;
+    background: var(--paper);
+  }
+
+  .kicker{
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    color: var(--wood-dark);
+    margin: 0 0 8px;
+    font-weight: 500;
+  }
+
+  h1{
+    font-family: 'Fraunces', Georgia, 'Times New Roman', serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-size: clamp(38px, 11vw, 52px);
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+
+  .tagline{
+    font-family: 'Fraunces', Georgia, serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 17px;
+    line-height: 1.5;
+    color: var(--wood-dark);
+    max-width: 28ch;
+    margin: 0 auto 10px;
+  }
+
+  .location{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin: 0 auto;
+  }
+  .location svg{ width: 14px; height: 14px; flex-shrink:0; }
+  .location svg path{ fill: var(--ink-soft); }
+
+  /* -------- tarjeta principal -------- */
+  .card{
+    background: var(--paper);
+    color: var(--ink);
+    border-radius: 22px;
+    padding: 30px 26px 26px;
+    box-shadow: 0 30px 60px -24px rgba(58,42,28,0.35);
+  }
+
+  .card-label{
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin: 0 0 16px;
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  .stars{
+    display:flex;
+    justify-content:center;
+    gap: 6px;
+    margin-bottom: 18px;
+  }
+  .stars svg{ width: 22px; height: 22px; }
+  .stars svg path{ fill: var(--gold); }
+
+  .cta{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap: 10px;
+    width: 100%;
+    text-decoration:none;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    font-size: 18px;
+    padding: 17px 20px;
+    border-radius: 13px;
+    transition: transform 0.15s ease, background 0.15s ease;
+  }
+  .cta:active{ transform: scale(0.98); }
+  .cta:hover{ background: #2A1D12; }
+
+  .cta .cta-sub{
+    display:block;
+    font-family: 'Work Sans', sans-serif;
+    font-weight: 400;
+    font-size: 12.5px;
+    color: var(--gold-soft);
+    margin-top: 2px;
+  }
+
+  .divider{
+    display:flex;
+    align-items:center;
+    gap: 12px;
+    margin: 26px 0 20px;
+    color: var(--ink-soft);
+    font-size: 12.5px;
+  }
+  .divider::before,
+  .divider::after{
+    content:"";
+    height: 1px;
+    flex:1;
+    background: var(--paper-dim);
+  }
+
+  .social-row{
+    display:flex;
+    gap: 12px;
+  }
+
+  .social-btn{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap: 7px;
+    text-decoration:none;
+    color: var(--ink);
+    background: var(--paper-dim);
+    border-radius: 13px;
+    padding: 14px 8px 12px;
+    font-size: 12.5px;
+    font-weight: 500;
+    transition: transform 0.15s ease, background 0.15s ease;
+  }
+  .social-btn:active{ transform: scale(0.96); }
+  .social-btn svg{ width: 22px; height: 22px; }
+
+  .social-btn.ig{ background: #FCE9DC; }
+  .social-btn.ig svg path{ fill: #C1447E; }
+
+  .social-btn.wa{ background: #DCEFE1; }
+  .social-btn.wa svg path{ fill: #2E9F5C; }
+
+  .social-btn.fb{ background: #DCE6F5; }
+  .social-btn.fb svg path{ fill: #3B5FA4; }
+
+  footer{
+    text-align:center;
+    margin-top: 26px;
+  }
+
+  footer p{
+    font-size: 12px;
+    color: var(--ink-soft);
+    opacity: 0.75;
+    margin:0;
+    line-height:1.6;
+  }
+
+  .creator-line{
+    margin-top: 22px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(58,42,28,0.12);
+  }
+
+  .creator-line a{
+    display:inline-flex;
+    align-items:center;
+    gap: 6px;
+    text-decoration:none;
+    color: var(--ink-soft);
+    opacity: 0.65;
+    font-size: 11.5px;
+    transition: opacity 0.15s ease;
+  }
+  .creator-line a:hover{ opacity: 1; }
+  .creator-line svg{ width: 13px; height: 13px; }
+  .creator-line svg path{ fill: currentColor; }
+
+  @media (prefers-reduced-motion: reduce){
+    .cta, .social-btn, .creator-line a{ transition: none; }
+  }
+
+  @media (max-width: 360px){
+    .card{ padding: 26px 20px 22px; }
+    .logo-img{ width: 140px; height: 140px; }
+  }
+</style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <div class="wrap">
+
+    <!-- ================================================================
+         PASO 2 — LOGO
+         ================================================================
+         Esta imagen se lee del archivo "logo.png".
+
+         Para cambiar el logo de un local:
+         1. Guardá la imagen nueva con el nombre exacto: logo.png
+            (si tu imagen es .jpg también sirve, pero entonces cambiá
+            abajo src="logo.png" por src="logo.jpg")
+         2. Subila a GitHub, en la MISMA carpeta que este index.html
+            (no adentro de ninguna subcarpeta), reemplazando el
+            logo.png anterior.
+         3. Listo, no hay que tocar nada más de este archivo: el
+            nombre "logo.png" ya está escrito en el código de abajo.
+
+         Si un local no tiene logo y preferís mostrar el nombre en
+         texto en su lugar, andá al PASO 3 (más abajo, en el
+         <script>) y dejá showLogo en false.
+         ================================================================ -->
+      <img class="logo-img" id="logoImg" src="logo.png" alt="Logo del local">
+      <p class="kicker" id="kicker" style="display:none;">Librería · Papelería</p>
+      <h1 id="businessName" style="display:none;">Peldaños</h1>
+      <p class="tagline" id="tagline">Tu forma de ser y crecer</p>
+      <p class="location" id="location">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C7.6 2 4 5.6 4 10c0 6 8 12 8 12s8-6 8-12c0-4.4-3.6-8-8-8zm0 10.8a2.8 2.8 0 110-5.6 2.8 2.8 0 010 5.6z"/></svg>
+        <span id="locationText">San Jerónimo Norte, Santa Fe</span>
+      </p>
+    </header>
+
+    <div class="card">
+      <div class="stars" aria-hidden="true">
+        <svg viewBox="0 0 20 20"><path d="M10 1.5l2.6 5.6 6.1.6-4.6 4.1 1.3 6-5.4-3.1L4.6 18l1.3-6L1.3 7.7l6.1-.6L10 1.5z"/></svg>
+        <svg viewBox="0 0 20 20"><path d="M10 1.5l2.6 5.6 6.1.6-4.6 4.1 1.3 6-5.4-3.1L4.6 18l1.3-6L1.3 7.7l6.1-.6L10 1.5z"/></svg>
+        <svg viewBox="0 0 20 20"><path d="M10 1.5l2.6 5.6 6.1.6-4.6 4.1 1.3 6-5.4-3.1L4.6 18l1.3-6L1.3 7.7l6.1-.6L10 1.5z"/></svg>
+        <svg viewBox="0 0 20 20"><path d="M10 1.5l2.6 5.6 6.1.6-4.6 4.1 1.3 6-5.4-3.1L4.6 18l1.3-6L1.3 7.7l6.1-.6L10 1.5z"/></svg>
+        <svg viewBox="0 0 20 20"><path d="M10 1.5l2.6 5.6 6.1.6-4.6 4.1 1.3 6-5.4-3.1L4.6 18l1.3-6L1.3 7.7l6.1-.6L10 1.5z"/></svg>
+      </div>
+
+      <p class="card-label">Un minuto tuyo nos ayuda un montón</p>
+
+      <a class="cta" id="googleBtn" href="#" target="_blank" rel="noopener">
+        <svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true">
+          <path fill="#FFC107" d="M43.6 20.5h-1.9V20.4H24v7.2h11.3c-1.6 4.6-6 7.9-11.3 7.9-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 8 3l5.1-5.1C33.6 6.1 29 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.2-.1-2.4-.4-3.5z"/>
+          <path fill="#FF3D00" d="M6.3 14.7l5.9 4.3C13.8 15.6 18.5 12.5 24 12.5c3.1 0 5.8 1.1 8 3l5.1-5.1C33.6 6.1 29 4 24 4c-7.4 0-13.7 4.2-17.7 10.7z"/>
+          <path fill="#4CAF50" d="M24 44c5.1 0 9.5-1.7 12.9-4.6l-6-5c-2 1.4-4.5 2.2-7 2.2-5.3 0-9.7-3.3-11.3-7.9l-6 4.6C9.6 39.6 16.2 44 24 44z"/>
+          <path fill="#1976D2" d="M43.6 20.5H24v7.2h11.3c-.8 2.3-2.2 4.2-4.1 5.6l6 5C40.5 35.1 44 30 44 24c0-1.2-.1-2.4-.4-3.5z"/>
+        </svg>
+        <span>
+          Dejanos tu reseña
+          <span class="cta-sub" id="ctaSub">Nos ayudás dejando 5 estrellas en Google</span>
+        </span>
+      </a>
+
+      <div class="divider">Seguinos y escribinos</div>
+
+      <div class="social-row" id="socialRow">
+        <a class="social-btn ig" id="igBtn" href="#" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.9.07 1.2.06 2 .25 2.5.42.6.24 1.1.55 1.6 1.05.5.5.8.95 1.05 1.6.18.5.36 1.3.42 2.5.07 1.3.07 1.7.07 4.9s0 3.6-.07 4.9c-.06 1.2-.25 2-.42 2.5-.24.6-.55 1.1-1.05 1.6-.5.5-.95.8-1.6 1.05-.5.18-1.3.36-2.5.42-1.3.07-1.7.07-4.9.07s-3.6 0-4.9-.07c-1.2-.06-2-.25-2.5-.42-.6-.24-1.1-.55-1.6-1.05-.5-.5-.8-.95-1.05-1.6-.18-.5-.36-1.3-.42-2.5C2.2 15.6 2.2 15.2 2.2 12s0-3.6.07-4.9c.06-1.2.25-2 .42-2.5.24-.6.55-1.1 1.05-1.6.5-.5.95-.8 1.6-1.05.5-.18 1.3-.36 2.5-.42C8.4 2.2 8.8 2.2 12 2.2zm0 1.98c-3.15 0-3.52 0-4.76.07-1.02.05-1.58.22-1.95.36-.49.19-.84.42-1.2.79-.37.36-.6.71-.79 1.2-.14.37-.31.93-.36 1.95C3.2 8.48 3.2 8.85 3.2 12s0 3.52.07 4.76c.05 1.02.22 1.58.36 1.95.19.49.42.84.79 1.2.36.37.71.6 1.2.79.37.14.93.31 1.95.36 1.24.06 1.61.07 4.76.07s3.52 0 4.76-.07c1.02-.05 1.58-.22 1.95-.36.49-.19.84-.42 1.2-.79.37-.36.6-.71.79-1.2.14-.37.31-.93.36-1.95.06-1.24.07-1.61.07-4.76s0-3.52-.07-4.76c-.05-1.02-.22-1.58-.36-1.95a3.2 3.2 0 00-.79-1.2 3.2 3.2 0 00-1.2-.79c-.37-.14-.93-.31-1.95-.36-1.24-.06-1.61-.07-4.76-.07zM12 7.1a4.9 4.9 0 110 9.8 4.9 4.9 0 010-9.8zm0 1.98a2.92 2.92 0 100 5.84 2.92 2.92 0 000-5.84zm5.1-2.15a1.14 1.14 0 110 2.28 1.14 1.14 0 010-2.28z"/></svg>
+          <span>Instagram</span>
+        </a>
+        <a class="social-btn wa" id="waBtn" href="#" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24"><path d="M17.5 14.4c-.3-.15-1.75-.86-2-.96-.28-.1-.48-.15-.68.15-.2.3-.78.96-.96 1.16-.18.2-.35.22-.65.08-.3-.15-1.28-.47-2.43-1.5-.9-.8-1.5-1.79-1.68-2.09-.18-.3-.02-.46.13-.6.13-.13.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.38-.02-.53-.08-.15-.68-1.65-.94-2.26-.24-.6-.5-.5-.68-.5-.18-.02-.38-.02-.58-.02-.2 0-.53.08-.8.38-.28.3-1.05 1.03-1.05 2.5s1.08 2.9 1.23 3.1c.15.2 2.13 3.25 5.16 4.56.72.31 1.28.5 1.72.64.72.23 1.38.2 1.9.12.58-.09 1.75-.72 2-1.4.24-.68.24-1.27.17-1.4-.08-.13-.28-.2-.58-.35zM12.02 2.5a9.5 9.5 0 00-8.13 14.4L2.5 21.5l4.7-1.34a9.5 9.5 0 104.82-17.66zm0 17.28a7.76 7.76 0 01-3.96-1.08l-.28-.17-2.79.8.8-2.71-.19-.28a7.78 7.78 0 1114.05-4.61 7.75 7.75 0 01-7.63 6.05z"/></svg>
+          <span>WhatsApp</span>
+        </a>
+        <a class="social-btn fb" id="fbBtn" href="#" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24"><path d="M13.5 21v-7.6h2.55l.38-2.96h-2.93V8.53c0-.86.24-1.44 1.47-1.44h1.57V4.44c-.27-.04-1.2-.12-2.28-.12-2.26 0-3.8 1.38-3.8 3.9v2.18H7.99v2.96h2.47V21h3.04z"/></svg>
+          <span>Facebook</span>
+        </a>
+      </div>
+    </div>
+
+    <footer>
+      <p id="footerNote">Peldaños · Gracias por ser parte</p>
+
+      <div class="creator-line">
+        <a id="creatorLink" href="#" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.2c3.2 0 3.6 0 4.9.07 1.2.06 2 .25 2.5.42.6.24 1.1.55 1.6 1.05.5.5.8.95 1.05 1.6.18.5.36 1.3.42 2.5.07 1.3.07 1.7.07 4.9s0 3.6-.07 4.9c-.06 1.2-.25 2-.42 2.5-.24.6-.55 1.1-1.05 1.6-.5.5-.95.8-1.6 1.05-.5.18-1.3.36-2.5.42-1.3.07-1.7.07-4.9.07s-3.6 0-4.9-.07c-1.2-.06-2-.25-2.5-.42-.6-.24-1.1-.55-1.6-1.05-.5-.5-.8-.95-1.05-1.6-.18-.5-.36-1.3-.42-2.5C2.2 15.6 2.2 15.2 2.2 12s0-3.6.07-4.9c.06-1.2.25-2 .42-2.5.24-.6.55-1.1 1.05-1.6.5-.5.95-.8 1.6-1.05.5-.18 1.3-.36 2.5-.42C8.4 2.2 8.8 2.2 12 2.2zm0 1.98c-3.15 0-3.52 0-4.76.07-1.02.05-1.58.22-1.95.36-.49.19-.84.42-1.2.79-.37.36-.6.71-.79 1.2-.14.37-.31.93-.36 1.95C3.2 8.48 3.2 8.85 3.2 12s0 3.52.07 4.76c.05 1.02.22 1.58.36 1.95.19.49.42.84.79 1.2.36.37.71.6 1.2.79.37.14.93.31 1.95.36 1.24.06 1.61.07 4.76.07s3.52 0 4.76-.07c1.02-.05 1.58-.22 1.95-.36.49-.19.84-.42 1.2-.79.37-.36.6-.71.79-1.2.14-.37.31-.93.36-1.95.06-1.24.07-1.61.07-4.76s0-3.52-.07-4.76c-.05-1.02-.22-1.58-.36-1.95a3.2 3.2 0 00-.79-1.2 3.2 3.2 0 00-1.2-.79c-.37-.14-.93-.31-1.95-.36-1.24-.06-1.61-.07-4.76-.07zM12 7.1a4.9 4.9 0 110 9.8 4.9 4.9 0 010-9.8zm0 1.98a2.92 2.92 0 100 5.84 2.92 2.92 0 000-5.84zm5.1-2.15a1.14 1.14 0 110 2.28 1.14 1.14 0 010-2.28z"/></svg>
+          <span id="creatorText">¿Te gustó esta tarjeta para tu local? escribime</span>
+        </a>
+      </div>
+    </footer>
+  </div>
+
+<script>
+  /* ================================================================
+     PASO 3 — TEXTOS Y LINKS
+     ================================================================
+     Este es el único bloque que hace falta editar para los datos
+     de cada local. Cambiá lo que está entre comillas "..." de cada
+     línea. No toques lo que está antes de los dos puntos (:), eso
+     es el nombre interno de cada dato y tiene que quedar igual.
+     ================================================================ */
+  const CONFIG = {
+    // Nombre del local. Solo se usa si showLogo está en false más
+    // abajo (si hay logo, el nombre ya viene dibujado en la imagen).
+    businessName: "Peldaños",
+
+    // Rubro corto. Igual que el nombre, solo se ve si showLogo es false.
+    kicker: "Librería · Papelería",
+
+    // Frase debajo del logo (el eslogan del local)
+    tagline: "Tu forma de ser y crecer",
+
+    // Ciudad / localidad del local. Si no querés mostrar ubicación,
+    // dejalo en "" (comillas vacías).
+    location: "San Jerónimo Norte, Santa Fe",
+
+    // Texto chiquito dentro del botón negro de Google
+    ctaSub: "Nos ayudás dejando 5 estrellas en Google",
+
+    // Texto del pie de página, arriba de tu firma
+    footerNote: "Peldaños · Gracias por ser parte",
+
+    // ¿Mostrar el logo (logo.png) o el nombre en texto?
+    // true  = muestra la imagen logo.png (ver PASO 2 más arriba)
+    // false = oculta la imagen y muestra businessName + kicker en texto
+    showLogo: true,
+
+    // --- LINKS --- (pegá acá la URL completa de cada uno)
+
+    // Reseña de Google: lo ideal es usar el link corto que da Google
+    // Perfil de Negocio ("Pedir reseñas"): https://g.page/r/XXXX/review
+    // Mientras tanto, se puede usar el link del local en Google Maps:
+    googleReviewUrl: "https://www.google.com/maps/place/Pelda%C3%B1os/@-31.5648983,-61.0803998,15.25z/data=!4m12!1m2!2m1!1zcGVsZGHDsW9z!3m8!1s0x95b5716941d48e6b:0xa26f58c6baaaa893!8m2!3d-31.555642!4d-61.0745164!9m1!1b1!15sCglwZWxkYcOxb3NaCyIJcGVsZGHDsW9zkgEKYm9va19zdG9yZZoBJENoZERTVWhOTUc5blMwVkpRMEZuU1VONGN6WTJkRzVuUlJBQuABAPoBBQivARAT!16s%2Fg%2F11rv1k18s2",
+
+    // Instagram del local. Si no tiene, dejalo en ""
+    instagramUrl: "https://www.instagram.com/maria_ines_perren?igsi=N2QzOWNrNnJmbjlz",
+
+    // WhatsApp del local. Si no tiene, dejalo en ""
+    whatsappUrl: "https://api.whatsapp.com/qr/VTHKQ5MYYM73J1?autoload=1&app_absent=0",
+
+    // Facebook del local. Si no tiene, dejalo en ""
+    facebookUrl: "https://www.facebook.com/mariaines.perren?rdid=ASvPpha6oL3J2MyW&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1DpVcqBHux%2F"
+  };
+  /* ================================================================
+     FIN PASO 3 — para un local nuevo, con haber editado PASO 1
+     (colores), PASO 2 (logo.png) y esto ya está todo listo.
+     Lo de acá abajo no hace falta tocarlo nunca.
+     ================================================================ */
+
+  /* ================================================================
+     TU FIRMA — dejá esto igual en todas las tarjetas que armes.
+     Es el contacto para que otros locales te encuentren.
+     ================================================================ */
+  const CREATOR = {
+    text: "¿Te gustó esta tarjeta para tu local? escribime",
+    instagramUrl: "https://www.instagram.com/nachoalbrecht?igsi=bGQ3NTNuNXYweTcx"
+  };
+  /* ================================================================ */
+
+  document.getElementById("tagline").textContent = CONFIG.tagline;
+  document.getElementById("locationText").textContent = CONFIG.location;
+  document.getElementById("ctaSub").textContent = CONFIG.ctaSub;
+  document.getElementById("footerNote").textContent = CONFIG.footerNote;
+  document.title = CONFIG.businessName + " — Dejanos tu opinión";
+
+  if (CONFIG.showLogo) {
+    // El logo ya está enlazado directo en el HTML como src="logo.png"
+    // (ver PASO 2 más arriba), acá no hace falta hacer nada más.
+  } else {
+    document.getElementById("logoImg").style.display = "none";
+    document.getElementById("kicker").textContent = CONFIG.kicker;
+    document.getElementById("kicker").style.display = "block";
+    document.getElementById("businessName").textContent = CONFIG.businessName;
+    document.getElementById("businessName").style.display = "block";
+  }
+
+  if (!CONFIG.location || CONFIG.location.trim() === "") {
+    document.getElementById("location").style.display = "none";
+  }
+
+  document.getElementById("googleBtn").href = CONFIG.googleReviewUrl;
+
+  function wireSocial(id, url){
+    const el = document.getElementById(id);
+    if (url && url.trim() !== "") {
+      el.href = url;
+    } else {
+      el.style.display = "none";
+    }
+  }
+  wireSocial("igBtn", CONFIG.instagramUrl);
+  wireSocial("waBtn", CONFIG.whatsappUrl);
+  wireSocial("fbBtn", CONFIG.facebookUrl);
+
+  const row = document.getElementById("socialRow");
+  const visibleButtons = Array.from(row.children).filter(el => el.style.display !== "none");
+  if (visibleButtons.length === 0) {
+    document.querySelector(".divider").style.display = "none";
+    row.style.display = "none";
+  }
+
+  document.getElementById("creatorText").textContent = CREATOR.text;
+  document.getElementById("creatorLink").href = CREATOR.instagramUrl;
+</script>
+
+</body>
+</html>
